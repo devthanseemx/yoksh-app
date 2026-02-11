@@ -1,3 +1,7 @@
+<?php
+ require_once '../config/db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +16,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <script src="../assets/scripts/export-service.js"></script>
+    <!-- <script src="../assets/scripts/export-service.js"></script> -->
    
     <!-- Tippy.js for Tooltips -->
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
@@ -45,12 +49,12 @@
     <script>
         $(document).ready(function () {
             // Load Sidebar and then initialize Tippy
-            $("#sidebar-container").load("includes/sidebar.html", function () {
+            $("#sidebar-container").load("includes/sidebar.php", function () {
                 initializeTooltips();
             });
 
             // Initial Content Load
-            $("#main-content").load("components/overview.html");
+            $("#main-content").load("components/curriculum.php");
 
             // Navigation Logic
             $(document).on('click', '.nav-icon-link', function (e) {
@@ -59,7 +63,7 @@
                 $(this).addClass('active');
 
                 let page = $(this).attr('data-page');
-                $("#main-content").load('components/' + page + ".php");
+                $("#main-content").load("components/" + page + ".php");
             });
 
             function initializeTooltips() {

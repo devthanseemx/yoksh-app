@@ -41,6 +41,6 @@
     </a>
     <div class="w-10 h-10 bg-slate-200 rounded-md overflow-hidden cursor-pointer border-2 border-white ring-1 ring-slate-200"
         data-tippy-content="User Profile">
-        <img src="/assets/images/founder-image.jpg" alt="Avatar">
+        <img src="../assets/images/founder-image.jpg" alt="Avatar">
     </div>
 </div>
