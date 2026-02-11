@@ -1,7 +1,6 @@
-
 let currentToast = null;
 
-// 1. Toast Notification (Top-Center)
+// Toast Notification (Top-Center)
 function showToast(message, type = 'info', description = '', linkUrl = null) {
     if (currentToast) {
         currentToast.hideToast();
@@ -22,7 +21,6 @@ function showToast(message, type = 'info', description = '', linkUrl = null) {
     iconContainer.innerHTML = icons[type] || icons['info'];
 
     const textContainer = document.createElement('div');
-    // Added 'break-words' to handle long text within the fixed width
     textContainer.className = 'overflow-hidden'; 
 
     const textElement = document.createElement('div');
@@ -60,7 +58,7 @@ function showToast(message, type = 'info', description = '', linkUrl = null) {
     currentToast.showToast();
 }
 
-// 2. Confirmation Modal (Yes/No)
+// Confirmation Modal (Yes/No)
 function showConfirmation(message, description = '', onYes = null, onNo = null) {
     const modal = document.getElementById("confirmModal");
     const msgEl = document.getElementById("confirmMessage");
@@ -86,7 +84,7 @@ function showConfirmation(message, description = '', onYes = null, onNo = null) 
     };
 }
 
-// 3. OK Modal
+// OK Modal
 function showOkModal(message, description = '') {
     const modal = document.getElementById("okConfirmModal");
     const msgEl = modal.querySelector("#confirmMessage");

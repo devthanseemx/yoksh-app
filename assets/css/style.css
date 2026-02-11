@@ -1,19 +1,13 @@
 /* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {
-    display: none;
-}
+.hide-scrollbar::-webkit-scrollbar {display: none;}
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
 }
 
 
-
-/* Ensure the main layout fills the screen without body-level scrolling */
 html,
 body {
     height: 100%;
@@ -22,20 +16,15 @@ body {
 }
 
 /* Sidebar item hover effect */
-.nav-icon-link {
-    transition: all 0.2s ease-in-out;
-}
+.nav-icon-link {transition: all 0.2s ease-in-out;}
 
 .nav-icon-link:hover {
     background-color: #f1f5f9;
-    /* slate-100 */
     color: #4f46e5;
-    /* indigo-600 */
 }
 
 .nav-icon-link.active {
     background-color: #eef2ff;
-    /* indigo-50 */
     color: #4f46e5;
 }
 
@@ -68,24 +57,15 @@ body {
     transition: 0.1s transform ease-in-out;
 }
 
-.topic-check:checked::before {
-    transform: scale(1);
-}
+.topic-check:checked::before {transform: scale(1);}
 
 /* Fixed height behavior for the grid */
-#moduleGrid {
-    align-items: start;
-    /* Prevents cards in the same row from stretching to match heights */
-}
-
-
+#moduleGrid {align-items: start;}
 
 /* Card hover state */
-.module-card:hover {
-    border-color: #cbd5e1;
-}
+.module-card:hover {border-color: #cbd5e1;}
 
-
+/* Animations */
 @keyframes slideUp {
     from {
         opacity: 0;
@@ -98,11 +78,6 @@ body {
     }
 }
 
-.animate-slideUp {
-    animation: slideUp 0.3s ease-out forwards;
-}
-
-/* Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -115,38 +90,6 @@ body {
     }
 }
 
-.animate-fadeIn {
-    animation: fadeIn 0.3s ease-out forwards;
-}
+.animate-slideUp {animation: slideUp 0.3s ease-out forwards;}
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fadeIn {
-    animation: fadeIn 0.4s ease-out forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fadeIn {
-    animation: fadeIn 0.4s ease-out forwards;
-}
+.animate-fadeIn {animation: fadeIn 0.4s ease-out forwards;}
