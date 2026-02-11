@@ -1,5 +1,4 @@
 <?php
-// handlers/users-action.php
 include '../../config/db.php';
 include '../includes/functions.php';
 
