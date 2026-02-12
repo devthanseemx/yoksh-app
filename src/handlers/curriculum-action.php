@@ -1,65 +1,63 @@
 <?php
+// handlers/curriculum-action.php
 include '../../config/db.php';
 include '../includes/functions.php';
 
 header('Content-Type: application/json');
 
 try {
-    $action = $_POST['action'] ?? 'save';
+    $action = $_POST['action'] ?? '';
 
-    // --- DELETE ACTION ---
+    // Handle Delete
     if ($action === 'delete') {
-        $module_id = $_POST['module_id'] ?? 0;
-
-        if (!$module_id) throw new Exception("Invalid Module ID");
-
-        $res = mysqli_query($conn, "SELECT module_code FROM modules WHERE id = $module_id");
-        $row = mysqli_fetch_assoc($res);
-        $m_code = $row['module_code'] ?? 'Unknown';
-
-        $sql = "DELETE FROM modules WHERE id = $module_id";
-
-        if (mysqli_query($conn, $sql)) {
-            recordActivity($conn, "Deleted Module: EPU-$m_code");
-            echo json_encode([
-                'status' => 'success',
-                'title' => 'Module Deleted',
-                'description' => "EPU-$m_code has been removed permanently."
-            ]);
-        } else {
-            throw new Exception(mysqli_error($conn));
-        }
+        $module_id = mysqli_real_escape_string($conn, $_POST['module_id']);
+        mysqli_query($conn, "DELETE FROM modules WHERE id = '$module_id'");
+        echo json_encode(['status' => 'success', 'title' => 'Deleted', 'description' => 'Module removed.']);
         exit;
     }
 
-    // --- SAVE ACTION ---
-    $module_code = trim($_POST['module_code'] ?? '');
-    $module_title = trim($_POST['module_title'] ?? '');
+    // Handle Save
+    $module_code = $_POST['module_code'] ?? '';
+    $module_title = $_POST['module_title'] ?? '';
     $chapters = $_POST['chapters'] ?? [];
 
     if (empty($module_code) || empty($module_title)) {
-        echo json_encode(['status' => 'error', 'title' => 'Missing Info', 'description' => 'Code and Title are required.']);
+        echo json_encode(['status' => 'error', 'title' => 'Error', 'description' => 'Required fields missing.']);
         exit;
     }
 
-    $sql = "INSERT INTO modules (module_code, module_title) VALUES ('" . mysqli_real_escape_string($conn, $module_code) . "', '" . mysqli_real_escape_string($conn, $module_title) . "')";
-
-    if (mysqli_query($conn, $sql)) {
+    // Insert Module
+    $sqlMod = "INSERT INTO modules (module_code, module_title) VALUES ('$module_code', '$module_title')";
+    if (mysqli_query($conn, $sqlMod)) {
         $module_id = mysqli_insert_id($conn);
-        foreach ($chapters as $ch) {
-            $ch_title = mysqli_real_escape_string($conn, $ch['title']);
-            mysqli_query($conn, "INSERT INTO chapters (module_id, chapter_title) VALUES ('$module_id', '$ch_title')");
+
+        // Loop through chapters for numbering
+        foreach ($chapters as $index => $ch) {
+            $chapter_no = $index + 1; // Creates 1, 2, 3...
+            $numbered_ch_title = $chapter_no . " " . $ch['title'];
+            
+            $safe_ch_title = mysqli_real_escape_string($conn, $numbered_ch_title);
+            mysqli_query($conn, "INSERT INTO chapters (module_id, chapter_title) VALUES ('$module_id', '$safe_ch_title')");
             $chapter_id = mysqli_insert_id($conn);
+
+            // Loop through sub-chapters for numbering (e.g., 1.1, 1.2)
             if (isset($ch['subs'])) {
-                foreach ($ch['subs'] as $sub) {
-                    $sub_title = mysqli_real_escape_string($conn, $sub);
-                    mysqli_query($conn, "INSERT INTO sub_chapters (chapter_id, sub_title) VALUES ('$chapter_id', '$sub_title')");
+                foreach ($ch['subs'] as $subIndex => $sub_title) {
+                    $sub_no = $subIndex + 1;
+                    $numbered_sub_title = $chapter_no . "." . $sub_no . " " . $sub_title;
+
+                    $safe_sub_title = mysqli_real_escape_string($conn, $numbered_sub_title);
+                    mysqli_query($conn, "INSERT INTO sub_chapters (chapter_id, sub_title) VALUES ('$chapter_id', '$safe_sub_title')");
                 }
             }
         }
+
+        // Log the activity
         recordActivity($conn, "Added Module: EPU-$module_code");
-        echo json_encode(['status' => 'success', 'title' => 'Module Saved', 'description' => "EPU-$module_code recorded successfully."]);
+
+        echo json_encode(['status' => 'success', 'title' => 'Saved', 'description' => 'Curriculum saved']);
     }
+
 } catch (Exception $e) {
     echo json_encode(['status' => 'error', 'title' => 'System Error', 'description' => $e->getMessage()]);
 }

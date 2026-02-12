@@ -10,6 +10,11 @@ include '../config/db.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoksh Study Planner</title>
 
+    <!-- Google Fonts: Noto Sans Tamil & Hind Madurai -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+
     <!-- ======= Stylesheets ======= -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -72,38 +77,43 @@ include '../config/db.php';
     <!-- ======= Application Logic ======= -->
     <script>
         $(document).ready(function() {
-            // Load Navigation and Tooltips
+            let lastPage = localStorage.getItem('activeDashboardPage') || 'overview';
+
             $("#sidebar-container").load("includes/sidebar.php", function() {
                 initializeTooltips();
+                $('.nav-icon-link').removeClass('active');
+                $(`.nav-icon-link[data-page="${lastPage}"]`).addClass('active');
             });
 
-            // Default Page Load
-            $("#main-content").load("components/curriculum.php");
+            $("#main-content").load("components/" + lastPage + ".php");
 
-            // Sidebar Navigation Handler
             $(document).on('click', '.nav-icon-link', function(e) {
                 e.preventDefault();
                 $('.nav-icon-link').removeClass('active');
                 $(this).addClass('active');
-
                 let page = $(this).attr('data-page');
+
+                localStorage.setItem('activeDashboardPage', page);
+
                 $("#main-content").load("components/" + page + ".php");
             });
 
-            // Initialize Tippy tooltips for navigation
             function initializeTooltips() {
-                tippy('[data-tippy-content]', {
-                    placement: 'right',
-                    theme: 'material',
-                    animation: 'shift-away',
-                    arrow: true
-                });
+                if (typeof tippy !== 'undefined') {
+                    tippy('[data-tippy-content]', {
+                        placement: 'right',
+                        theme: 'material',
+                        animation: 'shift-away',
+                        arrow: true
+                    });
+                }
             }
         });
     </script>
 
     <!-- External UI Helpers (Toasts & Modals Logic) -->
     <script src="../assets/js/ui-helpers.js"></script>
+    <script src="../assets/js/export-service.js"></script>
 </body>
 
 </html>
