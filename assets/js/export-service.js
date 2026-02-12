@@ -13,7 +13,7 @@ window.exportAssignmentImage = function (groupName, topics, moduleCode, members,
     const topicsHtml = topics.split('\n').filter(t => t.trim() !== "").map(t => `
         <div style="display: flex; align-items: flex-start; gap: 6px; margin-bottom: 3px;">
             <div style="width: 4px; height: 4px; background: #6366f1; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
-            <span style="font-size: 8.5px; color: #475569; line-height: 1.3;">${t.trim()}</span>
+            <span style="font-size: 7px; color: #475569; line-height: 1.3;">${t.trim()}</span>
         </div>
     `).join('');
 
@@ -52,7 +52,7 @@ window.exportAssignmentImage = function (groupName, topics, moduleCode, members,
                 <!-- CHAPTER SECTION -->
                 <div style="margin-bottom: 12px;">
                     <p style="font-size: 7px; font-weight: 700; color: #6366f1; text-transform: uppercase; margin: 0 0 2px 0;">Focus Chapter</p>
-                    <h3 style="font-size: 11px; font-weight: 800; color: #0f172a; margin: 0;">${chapterName}</h3>
+                    <h3 style="font-size: 7px; font-weight: 800; color: #0f172a; margin: 0;">${chapterName}</h3>
                 </div>
 
                 <!-- TOPICS (Bullet points) -->
