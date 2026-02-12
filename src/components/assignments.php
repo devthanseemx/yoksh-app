@@ -29,7 +29,7 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">1. Select Topics</h3>
             <div id="curriculumAccordion" class="space-y-3">
                 <?php while ($mod = mysqli_fetch_assoc($modules_query)): $mid = $mod['id']; ?>
-                    <div class="module-node bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
+                    <div class="module-node bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm" data-module-code="<?php echo $mod['module_code']; ?>">
                         <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 toggle-node">
                             <div class="flex items-center gap-3">
                                 <i class="fas fa-folder text-indigo-500"></i>
@@ -194,9 +194,11 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
             var topicsArr = [];
             var topicIds = [];
             var firstChapter = "";
+            var moduleCode = "";
 
             $('.sub-check:checked').each(function() {
                 if (!firstChapter) firstChapter = $(this).closest('.chapter-node').find('.chapter-title-val').text();
+                if (!moduleCode) moduleCode = $(this).closest('.module-node').attr('data-module-code');
                 topicsArr.push($(this).attr('data-name'));
                 topicIds.push($(this).attr('data-id'));
             });
@@ -213,7 +215,7 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
                     action: 'save',
                     group_id: selGroupId,
                     chapter_name: firstChapter,
-                    module_code: "EPU-" + Math.floor(1000 + Math.random() * 9000),
+                    module_code: "EPU-" + moduleCode,
                     topics_text: topicsArr.join("\n"), // Formats topics one below another
                     topic_ids: topicIds
                 },

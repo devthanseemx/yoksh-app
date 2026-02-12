@@ -1,5 +1,7 @@
 /* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {display: none;}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
@@ -8,15 +10,23 @@
 }
 
 
+
 html,
 body {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    font-family: 'Inter', 'Noto Sans Tamil', 'Hind Madurai', sans-serif;
+}
+
+.tamil-text {
+    font-family: 'Bamini', 'Noto Sans Tamil', sans-serif;
 }
 
 /* Sidebar item hover effect */
-.nav-icon-link {transition: all 0.2s ease-in-out;}
+.nav-icon-link {
+    transition: all 0.2s ease-in-out;
+}
 
 .nav-icon-link:hover {
     background-color: #f1f5f9;
@@ -57,13 +67,19 @@ body {
     transition: 0.1s transform ease-in-out;
 }
 
-.topic-check:checked::before {transform: scale(1);}
+.topic-check:checked::before {
+    transform: scale(1);
+}
 
 /* Fixed height behavior for the grid */
-#moduleGrid {align-items: start;}
+#moduleGrid {
+    align-items: start;
+}
 
 /* Card hover state */
-.module-card:hover {border-color: #cbd5e1;}
+.module-card:hover {
+    border-color: #cbd5e1;
+}
 
 /* Animations */
 @keyframes slideUp {
@@ -90,6 +106,10 @@ body {
     }
 }
 
-.animate-slideUp {animation: slideUp 0.3s ease-out forwards;}
+.animate-slideUp {
+    animation: slideUp 0.3s ease-out forwards;
+}
 
-.animate-fadeIn {animation: fadeIn 0.4s ease-out forwards;}
+.animate-fadeIn {
+    animation: fadeIn 0.4s ease-out forwards;
+}

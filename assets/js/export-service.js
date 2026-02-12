@@ -90,7 +90,7 @@ window.exportAssignmentImage = function (groupName, topics, moduleCode, members,
                     </div>
                 </div>
                 
-                <p style="font-size: 6.5px; font-weight: 600; color: #94a3b8; margin-top: 15px; text-align: center; text-transform: uppercase; opacity: 0.7;">
+                <p style="font-size: 6.5px; font-weight: 600; color: #94a3b8; margin-top: 20px; text-align: center; text-transform: uppercase; opacity: 0.7;">
                     System Developed by Thanseem (BIT - @UOM)
                 </p>
             </div>
@@ -102,7 +102,7 @@ window.exportAssignmentImage = function (groupName, topics, moduleCode, members,
         filename: groupName.replace(/\s+/g, '_') + '_Assign.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 4, useCORS: true },
-        jsPDF: { unit: 'px', format: [400, 480], orientation: 'portrait' }
+        jsPDF: { unit: 'px', format: [400, 550], orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(container.querySelector('#pdf-card')).save().then(() => {
