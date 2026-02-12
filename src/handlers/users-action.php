@@ -10,7 +10,7 @@ try {
     // --- DELETE USER ---
     if ($action === 'delete') {
         $id = mysqli_real_escape_string($conn, $_POST['id']);
-        
+
         // Get name for logging
         $res = mysqli_query($conn, "SELECT user_name FROM users WHERE id = '$id'");
         $user = mysqli_fetch_assoc($res);
@@ -35,6 +35,12 @@ try {
         exit;
     }
 
+    if (!strpos($phone, ' ')) {
+        $clean = str_replace('+94', '', $phone);
+        $clean = ltrim($clean, '0'); 
+        $phone = "+94 " . substr($clean, 0, 2) . " " . substr($clean, 2, 3) . " " . substr($clean, 5, 4);
+    }
+
     $safe_name = mysqli_real_escape_string($conn, $name);
     $safe_phone = mysqli_real_escape_string($conn, $phone);
 
@@ -56,7 +62,6 @@ try {
     } else {
         throw new Exception(mysqli_error($conn));
     }
-
 } catch (Exception $e) {
     echo json_encode(['status' => 'error', 'title' => 'System Error', 'description' => $e->getMessage()]);
 }

@@ -26,10 +26,10 @@
     </a>
     <a href="#" data-page="groups" data-tippy-content="Group Management"
         class="nav-icon-link w-10 h-10 flex items-center justify-center rounded-md text-slate-400">
-        <i class="fas fa-users text-lg"></i>
+        <i class="fas fa-object-group text-lg"></i>
     </a>
     <a href="#" data-page="assignments" data-tippy-content="Assign Chapters" class="nav-icon-link w-10 h-10 flex items-center justify-center rounded-md text-slate-400">
-    <i class="fas fa-chalkboard-user text-lg"></i>
+    <i class="fas fa-tasks text-lg"></i>
 </a>
 </nav>
 

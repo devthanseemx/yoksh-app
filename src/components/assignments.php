@@ -18,7 +18,7 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
 ?>
 
 <div class="max-w-full mx-auto animate-fadeIn pb-20">
-    <div class="mb-10">
+    <div class="mb-10 bg-white p-6 rounded-md border border-slate-100 shadow-sm">
         <h1 class="text-3xl font-bold text-slate-800">Group Assignments</h1>
         <p class="text-slate-500 mt-1">Deploy unassigned topics to groups.</p>
     </div>
@@ -28,48 +28,71 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
         <div class="lg:col-span-7 space-y-4">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">1. Select Topics</h3>
             <div id="curriculumAccordion" class="space-y-3">
-                <?php while ($mod = mysqli_fetch_assoc($modules_query)): $mid = $mod['id']; ?>
-                    <div class="module-node bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm" data-module-code="<?php echo $mod['module_code']; ?>">
-                        <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 toggle-node">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder text-indigo-500"></i>
-                                <span class="font-bold text-slate-700">Module: <?php echo $mod['module_title']; ?></span>
+
+                <?php
+                // 1. Check if there are any modules with available (uncompleted) sub-chapters
+                if (mysqli_num_rows($modules_query) > 0):
+                    while ($mod = mysqli_fetch_assoc($modules_query)): $mid = $mod['id'];
+                ?>
+                        <div class="module-node bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm" data-module-code="<?php echo $mod['module_code']; ?>">
+                            <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 toggle-node">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-folder text-indigo-500"></i>
+                                    <span class="font-bold text-slate-700">Module: <?php echo htmlspecialchars($mod['module_title']); ?></span>
+                                </div>
+                                <i class="fas fa-chevron-down text-slate-300 text-xs transition-transform"></i>
                             </div>
-                            <i class="fas fa-chevron-down text-slate-300 text-xs transition-transform"></i>
-                        </div>
-                        <div class="node-content hidden border-t border-slate-50 bg-slate-50/30 p-4 space-y-2">
-                            <?php
-                            $ch_query = mysqli_query($conn, "SELECT * FROM chapters WHERE module_id = '$mid'");
-                            while ($chap = mysqli_fetch_assoc($ch_query)): $cid = $chap['id'];
-                                $sub_query = mysqli_query($conn, "SELECT * FROM sub_chapters WHERE chapter_id = '$cid' AND is_completed = 0");
-                                if (mysqli_num_rows($sub_query) > 0):
-                            ?>
-                                    <div class="chapter-node bg-white border border-slate-100 rounded-md overflow-hidden">
-                                        <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-50 toggle-node">
-                                            <div class="flex items-center gap-3">
-                                                <i class="fas fa-book text-emerald-500 text-xs"></i>
-                                                <span class="text-sm font-semibold text-slate-600 chapter-title-val"><?php echo $chap['chapter_title']; ?></span>
+
+                            <div class="node-content hidden border-t border-slate-50 bg-slate-50/30 p-4 space-y-2">
+                                <?php
+                                $ch_query = mysqli_query($conn, "SELECT * FROM chapters WHERE module_id = '$mid'");
+                                while ($chap = mysqli_fetch_assoc($ch_query)): $cid = $chap['id'];
+                                    // Only fetch sub-chapters that are NOT completed (status 0)
+                                    $sub_query = mysqli_query($conn, "SELECT * FROM sub_chapters WHERE chapter_id = '$cid' AND is_completed = 0");
+                                    if (mysqli_num_rows($sub_query) > 0):
+                                ?>
+                                        <div class="chapter-node bg-white border border-slate-100 rounded-md overflow-hidden">
+                                            <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-50 toggle-node">
+                                                <div class="flex items-center gap-3">
+                                                    <i class="fas fa-book text-emerald-500 text-xs"></i>
+                                                    <span class="text-sm font-semibold text-slate-600 chapter-title-val"><?php echo htmlspecialchars($chap['chapter_title']); ?></span>
+                                                </div>
+                                                <i class="fas fa-plus text-slate-300 text-[10px]"></i>
                                             </div>
-                                            <i class="fas fa-plus text-slate-300 text-[10px]"></i>
-                                        </div>
-                                        <div class="node-content hidden p-4 border-t border-slate-50 bg-white">
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <?php while ($sub = mysqli_fetch_assoc($sub_query)): ?>
-                                                    <label class="flex items-center gap-3 p-3 border border-slate-100 rounded-md hover:border-indigo-200 cursor-pointer">
-                                                        <input type="checkbox" class="sub-check w-4 h-4 rounded text-indigo-600"
-                                                            data-id="<?php echo $sub['id']; ?>"
-                                                            data-name="<?php echo $sub['sub_title']; ?>">
-                                                        <span class="text-xs text-slate-600"><?php echo $sub['sub_title']; ?></span>
-                                                    </label>
-                                                <?php endwhile; ?>
+                                            <div class="node-content hidden p-4 border-t border-slate-50 bg-white">
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    <?php while ($sub = mysqli_fetch_assoc($sub_query)): ?>
+                                                        <label class="flex items-center gap-3 p-3 border border-slate-100 rounded-md hover:border-indigo-200 cursor-pointer transition">
+                                                            <input type="checkbox" class="sub-check w-4 h-4 rounded text-indigo-600"
+                                                                data-id="<?php echo $sub['id']; ?>"
+                                                                data-name="<?php echo htmlspecialchars($sub['sub_title']); ?>">
+                                                            <span class="text-xs text-slate-600"><?php echo htmlspecialchars($sub['sub_title']); ?></span>
+                                                        </label>
+                                                    <?php endwhile; ?>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                            <?php endif;
-                            endwhile; ?>
+                                <?php
+                                    endif;
+                                endwhile;
+                                ?>
+                            </div>
                         </div>
+                    <?php
+                    endwhile;
+                else:
+                    ?>
+                    <!-- Refined Empty State for Topics Selection -->
+                    <div id="topicsEmptyState" class="py-16 bg-white border-2 border-dashed border-slate-200 rounded-md text-center animate-fadeIn">
+                        <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-list-check text-2xl"></i>
+                        </div>
+                        <h3 class="text-slate-600 font-bold text-lg">No Topics Available</h3>
+                        <p class="text-slate-400 text-sm mt-2 max-w-xs mx-auto px-4 leading-relaxed">
+                            It looks like all topics are currently assigned or completed. Check the <b>Deployment History</b> or <b>Learning Progress</b>.
+                        </p>
                     </div>
-                <?php endwhile; ?>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -85,24 +108,47 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
                     </div>
                     <div id="groupListMenu" class="absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-md shadow-2xl hidden overflow-hidden">
                         <div class="max-h-60 overflow-y-auto">
-                            <?php while ($g = mysqli_fetch_assoc($groups_query)):
+                            <?php
+                            $available_count = 0;
+
+                            // Ensure the internal pointer is at the start if the query was used elsewhere
+                            if (mysqli_num_rows($groups_query) > 0) mysqli_data_seek($groups_query, 0);
+
+                            while ($g = mysqli_fetch_assoc($groups_query)):
+                                // Skip groups that are already busy
                                 if ($g['is_busy'] > 0) continue;
+
+                                $available_count++;
                                 $gid = $g['id'];
                                 $m_res = mysqli_query($conn, "SELECT user_name, user_phone FROM users u JOIN group_members gm ON u.id = gm.user_id WHERE gm.group_id = '$gid'");
                                 $members = [];
                                 while ($m = mysqli_fetch_assoc($m_res)) $members[] = ['name' => $m['user_name'], 'phone' => $m['user_phone']];
                             ?>
-                                <div class="group-select-opt p-4 border-b border-slate-50 hover:bg-indigo-50 cursor-pointer flex justify-between items-center"
+                                <!-- Group Option -->
+                                <div class="group-select-opt p-4 border-b border-slate-50 hover:bg-indigo-50 cursor-pointer flex justify-between items-center transition"
                                     data-id="<?php echo $g['id']; ?>"
                                     data-name="<?php echo $g['group_name']; ?>"
                                     data-members='<?php echo json_encode($members); ?>'>
                                     <div>
-                                        <p class="text-sm font-bold text-slate-700"><?php echo $g['group_name']; ?></p>
+                                        <p class="text-sm font-bold text-slate-700"><?php echo htmlspecialchars($g['group_name']); ?></p>
                                         <p class="text-[10px] text-emerald-500 font-bold uppercase">Status: Available</p>
                                     </div>
                                     <i class="fas fa-check-circle text-emerald-400"></i>
                                 </div>
                             <?php endwhile; ?>
+
+                            <?php if ($available_count === 0): ?>
+                                <!-- Empty State for Dropdown -->
+                                <div class="p-8 text-center animate-fadeIn">
+                                    <div class="w-12 h-12 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-users-slash text-xl"></i>
+                                    </div>
+                                    <h4 class="text-slate-600 font-bold text-xs uppercase tracking-tight">No Groups Available</h4>
+                                    <p class="text-slate-400 text-[10px] mt-1 leading-relaxed">
+                                        All groups are currently occupied or no groups have been created yet.
+                                    </p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -154,8 +200,21 @@ $history_query = mysqli_query($conn, "SELECT a.*, g.group_name FROM assignments 
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
-                <div id="assignmentEmptyMsg" class="col-span-full py-20 bg-white border-2 border-dashed border-slate-200 rounded-md text-center">
-                    <p class="text-slate-400 font-medium">No active assignments.</p>
+                <!-- Refined Empty State for Deployment History -->
+                <div id="assignmentEmptyMsg" class="col-span-full py-20 bg-white border-2 border-dashed border-slate-200 rounded-md text-center animate-fadeIn">
+                    <!-- Icon Circle -->
+                    <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-paper-plane text-2xl"></i>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="text-slate-600 font-bold text-lg">No Active Assignments</h3>
+
+                    <!-- Description -->
+                    <p class="text-slate-400 text-sm mt-2 max-w-sm mx-auto px-8 leading-relaxed">
+                        You haven't deployed any study passes yet. Select your topics and an available group above, then click
+                        <span class="text-indigo-600 font-bold">"Deploy Assignment"</span> to get started.
+                    </p>
                 </div>
             <?php endif; ?>
         </div>

@@ -5,12 +5,12 @@ include '../../config/db.php';
 <style>
     @font-face {
         font-family: 'MyLocalTamil';
-        src: url('../assets/fonts/Baamini.ttf'); 
+        src: url('../assets/fonts/Baamini.ttf');
     }
 
-    .tamil-text-input, 
-    .mod-title, 
-    .chapter-title-display, 
+    .tamil-text-input,
+    .mod-title,
+    .chapter-title-display,
     .sub-title-display {
         font-family: 'MyLocalTamil', sans-serif !important;
         line-height: 1.6 !important;
@@ -28,7 +28,7 @@ include '../../config/db.php';
 
 <div class="mx-auto animate-fadeIn pb-20">
     <!-- Page Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 bg-white p-6 rounded-md border border-slate-100 shadow-sm">
         <div>
             <h1 class="text-3xl font-bold text-slate-800">Curriculum Builder</h1>
             <p class="text-slate-500 mt-1">Manage course modules and chapters.</p>
@@ -110,11 +110,14 @@ include '../../config/db.php';
             <?php
             }
         } else { ?>
-            <div id="emptyState" class="col-span-full bg-white border-2 border-dashed border-slate-200 rounded-md py-20 text-center">
+            <div id="emptyState" class="col-span-full bg-white border-2 border-dashed border-slate-200 rounded-md py-20 text-center animate-fadeIn">
                 <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-layer-group text-2xl"></i>
                 </div>
-                <h3 class="text-slate-600 font-medium">No modules created</h3>
+                <h3 class="text-slate-600 font-bold text-lg">No Curriculum Modules</h3>
+                <p class="text-slate-400 text-sm mt-2 max-w-sm mx-auto px-6 leading-relaxed">
+                    Your curriculum is currently empty. Click the <b>"Add New Module"</b> button above to start organizing your chapters and sub-topics.
+                </p>
             </div>
         <?php } ?>
     </div>
@@ -169,7 +172,8 @@ include '../../config/db.php';
 
         // Add Chapter (Added tamil-text-input class)
         $(document).off('click', '.add-chapter-btn').on('click', '.add-chapter-btn', function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             const chapterHtml = `
             <div class="chapter-item bg-white border border-slate-200 rounded-md p-3 shadow-sm mb-3">
                 <div class="flex items-center justify-between mb-2">
@@ -195,14 +199,15 @@ include '../../config/db.php';
         });
 
         $(document).off('click', '.toggle-module-btn').on('click', '.toggle-module-btn', function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             const body = $(this).closest('.module-card').find('.module-body');
             $('.module-body').not(body).slideUp(200);
             body.slideToggle(250);
             $(this).find('i').toggleClass('rotate-180');
         });
 
-       $(document).on('click', function(e) {
+        $(document).on('click', function(e) {
             if (!$(e.target).closest('.module-card').length) {
                 $('.module-body').slideUp(200);
                 $('.toggle-module-btn i').removeClass('rotate-180');
@@ -238,9 +243,10 @@ include '../../config/db.php';
             });
         });
 
-        
+
         $(document).off('click.saveModule').on('click.saveModule', '.save-btn', function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             const card = $(this).closest('.module-card');
             const btn = $(this);
             if (btn.hasClass('is-saving')) return;
@@ -258,7 +264,10 @@ include '../../config/db.php';
             }
 
             card.find('.chapter-item').each(function() {
-                const ch = { title: $(this).find('.ch-title').val(), subs: [] };
+                const ch = {
+                    title: $(this).find('.ch-title').val(),
+                    subs: []
+                };
                 $(this).find('.sub-title').each(function() {
                     if ($(this).val().trim() !== "") ch.subs.push($(this).val());
                 });
@@ -274,7 +283,9 @@ include '../../config/db.php';
                 success: function(res) {
                     if (res.status === 'success') {
                         showToast(res.title, 'success', res.description);
-                        setTimeout(() => { location.reload(); }, 1000);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     } else {
                         showToast(res.title, 'error', res.description);
                         btn.removeClass('is-saving').html('<i class="fas fa-save text-sm"></i>');
@@ -287,15 +298,23 @@ include '../../config/db.php';
             e.stopPropagation();
             const card = $(this).closest('.module-card');
             const dbId = card.attr('data-db-id');
-            if (!dbId) { card.remove(); return; }
+            if (!dbId) {
+                card.remove();
+                return;
+            }
             showConfirmation("Delete Module?", "This will remove all chapters and sub-topics.", function() {
                 $.ajax({
                     url: 'handlers/curriculum-action.php',
                     type: 'POST',
-                    data: { action: 'delete', module_id: dbId },
+                    data: {
+                        action: 'delete',
+                        module_id: dbId
+                    },
                     success: function(res) {
                         if (res.status === 'success') {
-                            card.fadeOut(300, function() { $(this).remove(); });
+                            card.fadeOut(300, function() {
+                                $(this).remove();
+                            });
                             showToast(res.title, 'success', res.description);
                         }
                     }
@@ -303,7 +322,12 @@ include '../../config/db.php';
             });
         });
 
-        $(document).on('click', '.delete-chapter', function() { $(this).closest('.chapter-item').remove(); updateChapterCount($(this).closest('.module-card')); });
-        $(document).on('click', '.delete-sub', function() { $(this).closest('.sub-chapter-item').remove(); });
+        $(document).on('click', '.delete-chapter', function() {
+            $(this).closest('.chapter-item').remove();
+            updateChapterCount($(this).closest('.module-card'));
+        });
+        $(document).on('click', '.delete-sub', function() {
+            $(this).closest('.sub-chapter-item').remove();
+        });
     });
 </script>

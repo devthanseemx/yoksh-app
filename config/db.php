@@ -1,4 +1,7 @@
 <?php
+// Set the timezone to Sri Lanka
+date_default_timezone_set('Asia/Colombo');
+
 $servername = "localhost";
 $username = "root";
 $password = "";

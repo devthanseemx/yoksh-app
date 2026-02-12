@@ -34,7 +34,7 @@ $avatar_colors = [
 
 <div class="max-w-full mx-auto animate-fadeIn pb-20">
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 bg-white p-6 rounded-md border border-slate-100 shadow-sm">
         <div>
             <h1 class="text-3xl font-bold text-slate-800">Group Management</h1>
             <p class="text-slate-500 mt-1">Organize users into automatically named study groups.</p>
@@ -86,9 +86,22 @@ $avatar_colors = [
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <div id="emptyGroups" class="col-span-full py-20 bg-white border-2 border-dashed border-slate-200 rounded-md text-center">
-                <i class="fas fa-users-rectangle text-4xl text-slate-200 mb-3"></i>
-                <p class="text-slate-400">No groups created. Click "Create New Group" to start.</p>
+            <!-- Refined Empty State for Group Management -->
+            <div id="emptyGroups" class="col-span-full py-20 bg-white border-2 border-dashed border-slate-200 rounded-md text-center animate-fadeIn">
+                <!-- Icon Circle -->
+                <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-people-group text-2xl"></i>
+                </div>
+
+                <!-- Title -->
+                <h3 class="text-slate-600 font-bold text-lg">No Study Groups</h3>
+
+                <!-- Description -->
+                <p class="text-slate-400 text-sm mt-2 max-w-sm mx-auto px-6 leading-relaxed">
+                    It looks like you haven't organized your users yet. Click the
+                    <span class="text-indigo-600 font-bold">"Create New Group"</span>
+                    button to start grouping members for assignments.
+                </p>
             </div>
         <?php endif; ?>
     </div>
