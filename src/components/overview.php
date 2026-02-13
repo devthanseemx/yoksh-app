@@ -123,7 +123,7 @@ for ($i = 6; $i >= 0; $i--) {
                     $breakdown_query = mysqli_query($conn, "SELECT m.module_title, 
                     (SELECT COUNT(*) FROM chapters c JOIN sub_chapters s ON c.id = s.chapter_id WHERE c.module_id = m.id) as total,
                     (SELECT COUNT(*) FROM chapters c JOIN sub_chapters s ON c.id = s.chapter_id WHERE c.module_id = m.id AND s.is_completed = 1) as done
-                    FROM modules m LIMIT 4");
+                    FROM modules m LIMIT 6");
 
                     // 1. Check if there are any modules to display
                     if (mysqli_num_rows($breakdown_query) > 0):
