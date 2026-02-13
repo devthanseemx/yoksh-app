@@ -102,7 +102,7 @@ window.exportAssignmentImage = function (groupName, topics, moduleCode, members,
         filename: groupName.replace(/\s+/g, '_') + '_Assign.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 4, useCORS: true },
-        jsPDF: { unit: 'px', format: [400, 550], orientation: 'portrait' }
+        jsPDF: { unit: 'px', format: [400, 800], orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(container.querySelector('#pdf-card')).save().then(() => {
